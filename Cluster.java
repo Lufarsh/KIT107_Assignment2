@@ -93,12 +93,82 @@ public class Cluster implements ClusterInterface
 
     public Player most(char x)
     {
-        return null;
+        if (isEmpty())
+        {
+            return null;
+        }
+
+        Node current = firstPlayer;
+        Player best = null;
+        int max = Integer.MIN_VALUE;
+
+        while (current != null)
+        {
+            Player p = (Player) current.getData();
+            int value = 0;
+
+            switch (x)
+            {
+                case 'g': value = p.getGoals(); break;
+                case 'd': value = p.getDisposals(); break;
+                case 'c': value = p.getClangers(); break;
+                case 'a': value = p.getFreesAgainst(); break;
+                case 'm': value = p.getGames(); break;
+            }
+
+            if (value >= max)
+            {
+                max = value;
+                best = p;
+            }
+
+            current = current.getNext();
+        }
+
+        return best;
     }
 
     public String summary()
     {
-        return "";
+        if (isEmpty())
+        {
+            return "";
+        }
+
+        Node current = firstPlayer;
+
+        int disposals = 0, marks = 0, kicks = 0, handballs = 0, hitouts = 0;
+        int tackles = 0, clangers = 0, freesFor = 0, freesAgainst = 0;
+        int goals = 0, behinds = 0;
+
+        while (current != null)
+        {
+            Player p = (Player) current.getData();
+
+            disposals += p.getDisposals();
+            marks += p.getMarks();
+            kicks += p.getKicks();
+            handballs += p.getHandballs();
+            hitouts += p.getHitouts();
+            tackles += p.getTackles();
+            clangers += p.getClangers();
+            freesFor += p.getFreesFor();
+            freesAgainst += p.getFreesAgainst();
+            goals += p.getGoals();
+            behinds += p.getBehinds();
+
+            current = current.getNext();
+        }
+
+        int totalPoints = goals * 6 + behinds;
+
+        return "There were: " + disposals + " disposals (Marks: " + marks +
+                "; kicks: " + kicks + "; handballs: " + handballs +
+                "; hitouts: " + hitouts + ")\n" +
+                "Tackles: " + tackles + " Clangers: " + clangers + "\n" +
+                "Free kicks: " + freesFor + " for and " + freesAgainst + " against\n" +
+                "Scoring: " + goals + "." + behinds +
+                " for a total of " + totalPoints + " points.";
     }
 
     public String toString()

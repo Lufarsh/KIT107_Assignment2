@@ -24,7 +24,48 @@ public class Cluster implements ClusterInterface
 
     public void addPlayerToCluster(Player p)
     {
-        // to be implemented later
+        Node newNode = new Node(p);
+
+        if (isEmpty())
+        {
+            firstPlayer = newNode;
+            return;
+        }
+
+        Node current = firstPlayer;
+        Node previous = null;
+
+        while (current != null)
+        {
+            Player currentPlayer = (Player) current.getData();
+
+            int cmp = p.getName().compareTo(currentPlayer.getName());
+
+            if (cmp == 0)
+            {
+                currentPlayer.update(p);
+                return;
+            }
+
+            if (cmp < 0)
+            {
+                break;
+            }
+
+            previous = current;
+            current = current.getNext();
+        }
+
+        if (previous == null)
+        {
+            newNode.setNext(firstPlayer);
+            firstPlayer = newNode;
+        }
+        else
+        {
+            newNode.setNext(current);
+            previous.setNext(newNode);
+        }
     }
 
     public Player getFirstPlayer()

@@ -175,7 +175,7 @@ public void summarise(String t)
 
         if (p.getTeam().equalsIgnoreCase(t))
         {
-            System.out.println(t + "'s performance in can be summarised as follows:");
+           System.out.println(t + "'s performance in the season can be summarised as follows:");
             System.out.println(c.summary());
             return;
         }

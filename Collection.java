@@ -73,18 +73,39 @@ public class Collection implements CollectionInterface
     }
 }
 
-    public void showPlayerHistogram()
+  public void showPlayerHistogram()
+{
+    if (isEmpty())
     {
-        if (isEmpty())
-        {
-            System.out.println("Count of players per team:");
-            System.out.println("No data!");
-            return;
-        }
-
         System.out.println("Count of players per team:");
+        System.out.println("No data!");
+        return;
     }
 
+    System.out.println("Count of players per team:");
+
+    Node current = firstTeam;
+
+    while (current != null)
+    {
+        Cluster c = (Cluster) current.getData();
+        Player p = c.getFirstPlayer();
+
+        String team = p.getTeam();
+        int count = c.countPlayers();
+
+        System.out.print(" " + team + " | ");
+
+        for (int i = 0; i < count; i++)
+        {
+            System.out.print("*");
+        }
+
+        System.out.println(" " + count);
+
+        current = current.getNext();
+    }
+}
     public String most(char x)
     {
         return "No data!";

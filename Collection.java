@@ -158,18 +158,33 @@ public String most(char x)
 
     return best.toString();
 }
-    public void summarise(String t)
+public void summarise(String t)
+{
+    if (isEmpty())
     {
-        if (isEmpty())
+        System.out.println("No data!");
+        return;
+    }
+
+    Node current = firstTeam;
+
+    while (current != null)
+    {
+        Cluster c = (Cluster) current.getData();
+        Player p = c.getFirstPlayer();
+
+        if (p.getTeam().equalsIgnoreCase(t))
         {
-            System.out.println("No data!");
+            System.out.println(t + "'s performance in can be summarised as follows:");
+            System.out.println(c.summary());
             return;
         }
 
-        System.out.println(t + "'s performance in can be summarised as follows:");
-        System.out.println("No data!");
+        current = current.getNext();
     }
 
+    System.out.println("Team (" + t + ") not found!");
+}
     public String toString()
     {
         String result = "";

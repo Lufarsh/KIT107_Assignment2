@@ -3,7 +3,7 @@
  * 
  * KIT107 Assignment 2 -- Collection Implementation
  * 
- * @author <<your name and student ID number>>
+ * @author <Mohammad Arshath Kalilur Rahuman 106207>
  * @version	<<date of completion>>
  */
 

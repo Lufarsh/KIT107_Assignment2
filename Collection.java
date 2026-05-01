@@ -23,9 +23,55 @@ public class Collection implements CollectionInterface
     }
 
     public void addPlayerToCollection(Player p)
+{
+    if (isEmpty())
     {
-        // later
+        Cluster newCluster = new Cluster();
+        newCluster.addPlayerToCluster(p);
+        firstTeam = new Node(newCluster);
+        return;
     }
+
+    Node current = firstTeam;
+    Node previous = null;
+
+    while (current != null)
+    {
+        Cluster c = (Cluster) current.getData();
+        Player first = c.getFirstPlayer();
+
+        int cmp = p.getTeam().compareTo(first.getTeam());
+
+        if (cmp == 0)
+        {
+            c.addPlayerToCluster(p);
+            return;
+        }
+
+        if (cmp < 0)
+        {
+            break;
+        }
+
+        previous = current;
+        current = current.getNext();
+    }
+
+    Cluster newCluster = new Cluster();
+    newCluster.addPlayerToCluster(p);
+    Node newNode = new Node(newCluster);
+
+    if (previous == null)
+    {
+        newNode.setNext(firstTeam);
+        firstTeam = newNode;
+    }
+    else
+    {
+        newNode.setNext(current);
+        previous.setNext(newNode);
+    }
+}
 
     public void showPlayerHistogram()
     {

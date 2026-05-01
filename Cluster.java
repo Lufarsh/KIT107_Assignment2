@@ -3,7 +3,7 @@
  * 
  * KIT107 Assignment 2 -- Cluster Implementation
  * 
- * @author <<Arshath>>
+ * @author <<Mohammad Arshath Kalilur Rahuman>>
  * @version	<<date of completion>>
  */
 
@@ -15,6 +15,7 @@ public class Cluster implements ClusterInterface
     public Cluster()
     {
         firstPlayer = null;
+
     }
 
     public boolean isEmpty()

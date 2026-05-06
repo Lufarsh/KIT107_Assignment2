@@ -93,8 +93,8 @@ public class Collection implements CollectionInterface
 
         String team = p.getTeam();
         int count = c.countPlayers();
+System.out.printf(" %-20s | ", team);
 
-        System.out.print(" " + team + " | ");
 
         for (int i = 0; i < count; i++)
         {

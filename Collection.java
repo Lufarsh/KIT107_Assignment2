@@ -4,194 +4,179 @@
  * KIT107 Assignment 2 -- Collection Implementation
  * 
  * @author <Mohammad Arshath Kalilur Rahuman 106207>
- * @version	<<date of completion>>
+ * @version <<date of completion>>
  */
 
-
-public class Collection implements CollectionInterface
-{
+public class Collection implements CollectionInterface {
     protected Node firstTeam;
 
-    public Collection()
-    {
+    public Collection() {
         firstTeam = null;
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return firstTeam == null;
     }
 
-    public void addPlayerToCollection(Player p)
-{
-    if (isEmpty())
-    {
+    public void addPlayerToCollection(Player p) {
+        if (isEmpty()) {
+            Cluster newCluster = new Cluster();
+            newCluster.addPlayerToCluster(p);
+            firstTeam = new Node(newCluster);
+            return;
+        }
+
+        Node current = firstTeam;
+        Node previous = null;
+
+        while (current != null) {
+            Cluster c = (Cluster) current.getData();
+            Player first = c.getFirstPlayer();
+
+            int cmp = p.getTeam().compareTo(first.getTeam());
+
+            if (cmp == 0) {
+                c.addPlayerToCluster(p);
+                return;
+            }
+
+            if (cmp < 0) {
+                break;
+            }
+
+            previous = current;
+            current = current.getNext();
+        }
+
         Cluster newCluster = new Cluster();
         newCluster.addPlayerToCluster(p);
-        firstTeam = new Node(newCluster);
-        return;
+        Node newNode = new Node(newCluster);
+
+        if (previous == null) {
+            newNode.setNext(firstTeam);
+            firstTeam = newNode;
+        } else {
+            newNode.setNext(current);
+            previous.setNext(newNode);
+        }
     }
 
-    Node current = firstTeam;
-    Node previous = null;
-
-    while (current != null)
-    {
-        Cluster c = (Cluster) current.getData();
-        Player first = c.getFirstPlayer();
-
-        int cmp = p.getTeam().compareTo(first.getTeam());
-
-        if (cmp == 0)
-        {
-            c.addPlayerToCluster(p);
+    public void showPlayerHistogram() {
+        if (isEmpty()) {
+            System.out.println("Count of players per team:");
+            System.out.println("No data!");
             return;
         }
 
-        if (cmp < 0)
-        {
-            break;
-        }
-
-        previous = current;
-        current = current.getNext();
-    }
-
-    Cluster newCluster = new Cluster();
-    newCluster.addPlayerToCluster(p);
-    Node newNode = new Node(newCluster);
-
-    if (previous == null)
-    {
-        newNode.setNext(firstTeam);
-        firstTeam = newNode;
-    }
-    else
-    {
-        newNode.setNext(current);
-        previous.setNext(newNode);
-    }
-}
-
-  public void showPlayerHistogram()
-{
-    if (isEmpty())
-    {
         System.out.println("Count of players per team:");
-        System.out.println("No data!");
-        return;
+
+        Node current = firstTeam;
+
+        while (current != null) {
+            Cluster c = (Cluster) current.getData();
+            Player p = c.getFirstPlayer();
+
+            String team = p.getTeam();
+            int count = c.countPlayers();
+            System.out.printf(" %-20s | ", team);
+
+            for (int i = 0; i < count; i++) {
+                System.out.print("*");
+            }
+
+            System.out.println(" " + count);
+
+            current = current.getNext();
+        }
     }
 
-    System.out.println("Count of players per team:");
-
-    Node current = firstTeam;
-
-    while (current != null)
-    {
-        Cluster c = (Cluster) current.getData();
-        Player p = c.getFirstPlayer();
-
-        String team = p.getTeam();
-        int count = c.countPlayers();
-System.out.printf(" %-20s | ", team);
-
-
-        for (int i = 0; i < count; i++)
-        {
-            System.out.print("*");
+    public String most(char x) {
+        if (isEmpty()) {
+            return "No data!";
         }
 
-        System.out.println(" " + count);
+        Node current = firstTeam;
+        Player best = null;
 
-        current = current.getNext();
-    }
-}
-public String most(char x)
-{
-    if (isEmpty())
-    {
-        return "No data!";
-    }
+        while (current != null) {
+            Cluster c = (Cluster) current.getData();
+            Player p = c.most(x);
 
-    Node current = firstTeam;
-    Player best = null;
-
-    while (current != null)
-    {
-        Cluster c = (Cluster) current.getData();
-        Player p = c.most(x);
-
-        if (p != null)
-        {
-            if (best == null)
-            {
-                best = p;
-            }
-            else
-            {
-               int currentValue = 0;
-int bestValue = 0;
-
-                switch (x)
-                {
-                    case 'g': currentValue = p.getGoals(); bestValue = best.getGoals(); break;
-                    case 'd': currentValue = p.getDisposals(); bestValue = best.getDisposals(); break;
-                    case 'c': currentValue = p.getClangers(); bestValue = best.getClangers(); break;
-                    case 'a': currentValue = p.getFreesAgainst(); bestValue = best.getFreesAgainst(); break;
-                    case 'm': currentValue = p.getGames(); bestValue = best.getGames(); break;
-                }
-
-                if (currentValue >= bestValue)
-                {
+            if (p != null) {
+                if (best == null) {
                     best = p;
+                } else {
+                    int currentValue = 0;
+                    int bestValue = 0;
+
+                    switch (x) {
+                        case 'g':
+                            currentValue = p.getGoals();
+                            bestValue = best.getGoals();
+                            break;
+                        case 'd':
+                            currentValue = p.getDisposals();
+                            bestValue = best.getDisposals();
+                            break;
+                        case 'c':
+                            currentValue = p.getClangers();
+                            bestValue = best.getClangers();
+                            break;
+                        case 'a':
+                            currentValue = p.getFreesAgainst();
+                            bestValue = best.getFreesAgainst();
+                            break;
+                        case 'm':
+                            currentValue = p.getGames();
+                            bestValue = best.getGames();
+                            break;
+                    }
+
+                    if (currentValue >= bestValue) {
+                        best = p;
+                    }
                 }
             }
+
+            current = current.getNext();
         }
 
-        current = current.getNext();
+        if (best == null) {
+            return "No data!";
+        }
+
+        return best.toString();
     }
 
-    if (best == null)
-    {
-        return "No data!";
-    }
-
-    return best.toString();
-}
-public void summarise(String t)
-{
-    if (isEmpty())
-    {
-        System.out.println("No data!");
-        return;
-    }
-
-    Node current = firstTeam;
-
-    while (current != null)
-    {
-        Cluster c = (Cluster) current.getData();
-        Player p = c.getFirstPlayer();
-
-        if (p.getTeam().equalsIgnoreCase(t))
-        {
-           System.out.println(t + "'s performance in the season can be summarised as follows:");
-            System.out.println(c.summary());
+    public void summarise(String t) {
+        if (isEmpty()) {
+            System.out.println("No data!");
             return;
         }
 
-        current = current.getNext();
+        Node current = firstTeam;
+
+        while (current != null) {
+            Cluster c = (Cluster) current.getData();
+            Player p = c.getFirstPlayer();
+
+            if (p.getTeam().equalsIgnoreCase(t)) {
+                System.out.println(t + "'s performance in the season can be summarised as follows:");
+                System.out.println(c.summary());
+                return;
+            }
+
+            current = current.getNext();
+        }
+
+        System.out.println("Team (" + t + ") not found!");
     }
 
-    System.out.println("Team (" + t + ") not found!");
-}
-    public String toString()
-    {
+    public String toString() {
         String result = "";
         Node current = firstTeam;
 
-        while (current != null)
-        {
+        while (current != null) {
             result += current.getData().toString() + "\n";
             current = current.getNext();
         }

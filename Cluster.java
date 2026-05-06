@@ -4,31 +4,25 @@
  * KIT107 Assignment 2 -- Cluster Implementation
  * 
  * @author <<Mohammad Arshath Kalilur Rahuman>>
- * @version	<<date of completion>>
+ * @version <<date of completion>>
  */
 
-
-public class Cluster implements ClusterInterface
-{
+public class Cluster implements ClusterInterface {
     protected Node firstPlayer;
 
-    public Cluster()
-    {
+    public Cluster() {
         firstPlayer = null;
 
     }
 
-    public boolean isEmpty()
-    {
+    public boolean isEmpty() {
         return firstPlayer == null;
     }
 
-    public void addPlayerToCluster(Player p)
-    {
+    public void addPlayerToCluster(Player p) {
         Node newNode = new Node(p);
 
-        if (isEmpty())
-        {
+        if (isEmpty()) {
             firstPlayer = newNode;
             return;
         }
@@ -36,20 +30,17 @@ public class Cluster implements ClusterInterface
         Node current = firstPlayer;
         Node previous = null;
 
-        while (current != null)
-        {
+        while (current != null) {
             Player currentPlayer = (Player) current.getData();
 
             int cmp = p.getName().compareTo(currentPlayer.getName());
 
-            if (cmp == 0)
-            {
+            if (cmp == 0) {
                 currentPlayer.update(p);
                 return;
             }
 
-            if (cmp < 0)
-            {
+            if (cmp < 0) {
                 break;
             }
 
@@ -57,34 +48,27 @@ public class Cluster implements ClusterInterface
             current = current.getNext();
         }
 
-        if (previous == null)
-        {
+        if (previous == null) {
             newNode.setNext(firstPlayer);
             firstPlayer = newNode;
-        }
-        else
-        {
+        } else {
             newNode.setNext(current);
             previous.setNext(newNode);
         }
     }
 
-    public Player getFirstPlayer()
-    {
-        if (isEmpty())
-        {
+    public Player getFirstPlayer() {
+        if (isEmpty()) {
             return null;
         }
         return (Player) firstPlayer.getData();
     }
 
-    public int countPlayers()
-    {
+    public int countPlayers() {
         int count = 0;
         Node current = firstPlayer;
 
-        while (current != null)
-        {
+        while (current != null) {
             count++;
             current = current.getNext();
         }
@@ -92,10 +76,8 @@ public class Cluster implements ClusterInterface
         return count;
     }
 
-    public Player most(char x)
-    {
-        if (isEmpty())
-        {
+    public Player most(char x) {
+        if (isEmpty()) {
             return null;
         }
 
@@ -103,22 +85,29 @@ public class Cluster implements ClusterInterface
         Player best = null;
         int max = Integer.MIN_VALUE;
 
-        while (current != null)
-        {
+        while (current != null) {
             Player p = (Player) current.getData();
             int value = 0;
 
-            switch (x)
-            {
-                case 'g': value = p.getGoals(); break;
-                case 'd': value = p.getDisposals(); break;
-                case 'c': value = p.getClangers(); break;
-                case 'a': value = p.getFreesAgainst(); break;
-                case 'm': value = p.getGames(); break;
+            switch (x) {
+                case 'g':
+                    value = p.getGoals();
+                    break;
+                case 'd':
+                    value = p.getDisposals();
+                    break;
+                case 'c':
+                    value = p.getClangers();
+                    break;
+                case 'a':
+                    value = p.getFreesAgainst();
+                    break;
+                case 'm':
+                    value = p.getGames();
+                    break;
             }
 
-            if (value >= max)
-            {
+            if (value >= max) {
                 max = value;
                 best = p;
             }
@@ -129,10 +118,8 @@ public class Cluster implements ClusterInterface
         return best;
     }
 
-    public String summary()
-    {
-        if (isEmpty())
-        {
+    public String summary() {
+        if (isEmpty()) {
             return "";
         }
 
@@ -142,8 +129,7 @@ public class Cluster implements ClusterInterface
         int tackles = 0, clangers = 0, freesFor = 0, freesAgainst = 0;
         int goals = 0, behinds = 0;
 
-        while (current != null)
-        {
+        while (current != null) {
             Player p = (Player) current.getData();
 
             disposals += p.getDisposals();
@@ -172,13 +158,11 @@ public class Cluster implements ClusterInterface
                 " for a total of " + totalPoints + " points.";
     }
 
-    public String toString()
-    {
+    public String toString() {
         String result = "";
         Node current = firstPlayer;
 
-        while (current != null)
-        {
+        while (current != null) {
             result += current.getData().toString() + "\n";
             current = current.getNext();
         }

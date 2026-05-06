@@ -129,19 +129,19 @@ public String most(char x)
             }
             else
             {
-                int val1 = 0;
-                int val2 = 0;
+               int currentValue = 0;
+int bestValue = 0;
 
                 switch (x)
                 {
-                    case 'g': val1 = p.getGoals(); val2 = best.getGoals(); break;
-                    case 'd': val1 = p.getDisposals(); val2 = best.getDisposals(); break;
-                    case 'c': val1 = p.getClangers(); val2 = best.getClangers(); break;
-                    case 'a': val1 = p.getFreesAgainst(); val2 = best.getFreesAgainst(); break;
-                    case 'm': val1 = p.getGames(); val2 = best.getGames(); break;
+                    case 'g': currentValue = p.getGoals(); bestValue = best.getGoals(); break;
+                    case 'd': currentValue = p.getDisposals(); bestValue = best.getDisposals(); break;
+                    case 'c': currentValue = p.getClangers(); bestValue = best.getClangers(); break;
+                    case 'a': currentValue = p.getFreesAgainst(); bestValue = best.getFreesAgainst(); break;
+                    case 'm': currentValue = p.getGames(); bestValue = best.getGames(); break;
                 }
 
-                if (val1 >= val2)
+                if (currentValue >= bestValue)
                 {
                     best = p;
                 }
